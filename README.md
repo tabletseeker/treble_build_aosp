@@ -24,7 +24,7 @@ All necessary packages and path implementations are covered by the build script,
 ## Customization
 All customization options can be found in the treble_build_aosp folder
 #### misc
-- treble_build_aosp/misc/phh/xml contains the config xmls for all phh settings
+- treble_build_aosp/misc/phh/xml contains the config xmls for all phh settings.
   the currently assigned default settings are linear brightness (to fix broken slider adjustment),
   double tap to wake, Samsung alternate audio policy and stereo to fix multi speaker issues and allowing the
   lowest possible brightness.
