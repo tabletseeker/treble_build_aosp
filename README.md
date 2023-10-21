@@ -35,6 +35,7 @@ All customization options can be found in the treble_build_aosp folder
 #### apk
 - treble_build_aosp/apk/handheld_product.mk is needed to enter application folders for installation
 - treble_build_aosp/apk/apps contains the application folders that will be automatically installed in the build
+  
 What you need to do:
 - create a folder in treble_build_aosp/apk/apps
 - rename the folder to resemble your app's name with the first letter being capitalized
