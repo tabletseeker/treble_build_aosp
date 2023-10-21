@@ -49,10 +49,10 @@ By default the apk folder already contains a few app folders with Android.mk fil
 contains transparent pointer_arrow.png duplicates that will override the defaults during build. This is meant to make stylus operation easier.
 You can disable it by commenting out the following in treble_build_aosp/build.sh:
 ```
-cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
-cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
-cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
-cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/tests/HwAccelerationTest/res/drawable/default_wallpaper.png
+cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
+cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
+cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
+cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
 ```
 #### system settings
 - treble_build_aosp/build.sh contains a function called `configPatches()`
