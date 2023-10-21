@@ -40,8 +40,8 @@ What you need to do:
 - create a folder in treble_build_aosp/apk/apps
 - rename the folder to resemble your app's name with the first letter being capitalized
 - enter that name in the treble_build_aosp/apk/handheld_product.mk
-- create and Android.mk file in your newly created app folder
-- add your Android.mk file and apk
+- create an Android.mk file in your new app folder
+- add your apk file to this folder and rename it accordingly
 - uncomment this line `#cp -r $BL/apk/apps/* $PWD/packages/apps` in the treble_build_aosp/build.sh
 #### Caution!
 By default the apk folder already contains a few app folders with Android.mk files. If you **do not** want them, **delete** those folders.    This is for the purpose of including apps most people install anyways and to serve as a template for other apps you might want to install.    Thus all you would have to do to install them is add the apks (from apkmirror or any other suorce) to those folders and rename the apks as referenced in the Android.mk under LOCAL_SRC_FILES.
