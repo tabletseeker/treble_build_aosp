@@ -192,9 +192,9 @@ copyFiles() {
 	cp $BL/misc/phh/xml/* $PWD/treble_app/app/src/main/res/xml
 	#wallpaper_1600x2560
 	cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
-	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
-	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
-	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/tests/HwAccelerationTest/res/drawable/default_wallpaper.png
+	cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
+	cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
+	cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/tests/HwAccelerationTest/res/drawable/default_wallpaper.png
 	#apps
 	#cp -r $BL/apk/apps/* $PWD/packages/apps
 }
