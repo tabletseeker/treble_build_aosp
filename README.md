@@ -1,4 +1,4 @@
-# TrebleDroid AOSP GSI
+# Fully Customizable TrebleDroid AOSP GSI
 
 ## Build
 All necessary packages and path implementations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
