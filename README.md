@@ -1,22 +1,54 @@
 # TrebleDroid AOSP GSI
 
 ## Build
-To get started with building AOSP GSI, you'll need to get familiar with [Git and Repo](https://source.android.com/source/using-repo.html) as well as [How to build a GSI](https://github.com/phhusson/treble_experimentations/wiki/How-to-build-a-GSI%3F).
+All necessary packages and path implemenations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
+
+- Add user to group plugdev and log out:
+    ```
+   sudo usermod -aG plugdev $LOGNAME
+    ```  
 - Create a new working directory for your AOSP build and navigate to it:
     ```
     mkdir aosp; cd aosp
     ```
 - Clone this repo:
     ```
-    git clone https://github.com/ponces/treble_build_aosp -b android-14.0
+    git clone https://github.com/tabletseeker/treble_build_aosp -b android-14.0
     ```
+- Customize as needed
+
 - Finally, start the build script:
     ```
     bash treble_build_aosp/build.sh
     ```
+## Customization
+All customization options can be found in the treble_build_aosp folder
+#### misc
+- treble_build_aosp/misc/phh/xml contains the config xmls for all phh settings
+  the currently assigned default settings are linear brightness (to fix broken slider adjustment),
+  double tap to wake, Samsung alternate audio policy and stereo to fix multi speaker issues and allowing the
+  lowest possible brightness.
+- treble_build_aosp/misc/wallpaper contains the default wallpaper. You can replace it with any image you want
+  as long as the image size matches your device's screen resolution. The current image's size is 1600x2560 ( Galaxy Tab S6)
+- treble_build_aosp/misc/gradle.sh fixes java and android path issues in the original treble_app build.sh
+- treble_build_aosp/misc/keymaker.sh automatically removes the default signing keys and creates new ones (password requested)
+#### apk
+- treble_build_aosp/apk/handheld_product.mk is needed to enter application folders for installation
+- treble_build_aosp/apk/apps contains the application folders that will be automatically installed in the build
+What you need to do:
+- create a folder in treble_build_aosp/apk/apps
+- rename the folder to resemble your app's name with the first letter being capitalized
+- enter that name in the treble_build_aosp/apk/handheld_product.mk
+- create and Android.mk file in your newly created app folder
+- add your Android.mk file and apk
+- uncomment this line '#cp -r $BL/apk/apps/* $PWD/packages/apps' in the treble_build_aosp/build.sh
+#### Caution!
+  By default the apk folder already contains a few app folders with Android.mk files. If you **do not** want them, **delete** those folders. This is for the purpose of including
+  apps most people install anyways and to serve as a template for other apps you might want to install. Thus all you would have to do
+  to install them is add the apks (from apkmirror or any other suorce) to those folders and rename the apks as referenced in the Android.mk under LOCAL_SRC_FILES.
 
 ## Issues
-[Open issue](https://github.com/ponces/treble_build_aosp/issues/new/choose)
+[Open issue](https://github.com/tabletseeker/treble_build_aosp/issues/new/choose)
 
 ## Credits
 These people have helped this project in some way or another, so they should be the ones who receive all the credit:
@@ -29,3 +61,4 @@ These people have helped this project in some way or another, so they should be 
 - [sooti](https://github.com/sooti)
 - [Iceows](https://github.com/Iceows)
 - [ChonDoit](https://github.com/ChonDoit)
+- [ponces](https://github.com/ponces)
