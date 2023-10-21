@@ -60,7 +60,7 @@ done
 	git config --global user.name "johndoe"
 
 	sudo groupadd android-sdk
-	sudo gpasswd -a liveuser android-sdk
+	sudo gpasswd -a $LOGNAME android-sdk
 	sudo setfacl -R -m g:android-sdk:rwx /opt/android-sdk
 	sudo setfacl -d -m g:android-sdk:rwX /opt/android-sdk
 	newgrp android-sdk
