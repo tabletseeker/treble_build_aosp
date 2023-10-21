@@ -50,9 +50,9 @@ git clone https://aur.archlinux.org/lib32-ncurses5-compat-libs.git
 git clone https://aur.archlinux.org/android-support-repository.git
 git clone https://aur.archlinux.org/marvin_dsc.git
 
-for i in ./*/* ; do
+for i in ./*/ ; do
 
-	(cd "$i" && makepkg -s -i -c --noconfirm)
+	(cd "$i" && makepkg -s -i -c --noconfirm; cd ..)
 
 done
 
