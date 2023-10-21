@@ -1,7 +1,7 @@
 # TrebleDroid AOSP GSI
 
 ## Build
-All necessary packages and path implemenations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
+All necessary packages and path implementations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
 
 - Add user to group plugdev and log out:
     ```
