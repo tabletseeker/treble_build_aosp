@@ -4,19 +4,35 @@ echo
 echo "--------------------------------------"
 echo "          AOSP 14.0 Buildbot          "
 echo "                  by                  "
-echo "                ponces                "
+echo "             tablet_seeker            "
 echo "--------------------------------------"
 echo
+
 
 set -e
 
 BL=$PWD/treble_build_aosp
 BD=$HOME/builds
 
+buildEnv() {
+
+	sudo apt-get update && sudo apt-get install -y git-core gnupg flex bison \
+	build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
+	libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
+	clang repo git android-sdk-platform-tools-common openjdk-17-jdk
+
+	git config --global user.email "anon@ymous.com"
+	git config --global user.name "johndoe"
+
+	JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
+	export SKIP_ABI_CHECKS=true
+	export JAVA_HOME=$JAVA_DIR
+}
+
 initRepos() {
     if [ ! -d .repo ]; then
         echo "--> Initializing workspace"
-        repo init -u https://android.googlesource.com/platform/manifest -b android-14.0.0_r11
+        repo init --depth=1 -u https://android.googlesource.com/platform/manifest -b android-14.0.0_r11
         echo
 
         echo "--> Preparing local manifest"
@@ -49,6 +65,111 @@ applyPatches() {
     echo
 }
 
+configPatches() {
+	#xml_location
+	config_xml="$PWD/frameworks/base/core/res/res/values/config.xml"
+	defaults_xml="$PWD/frameworks/base/packages/SettingsProvider/res/values/defaults.xml"
+	#spacing
+	space=$(printf "%*s%s" 4)
+	#array_additions | string="<location>:<grep>:$space<replace>:<location>:<grep>:$space<replace>....."
+	string=""
+	#navigation_bar
+	array[0]="$config_xml"
+	array[1]="config_navBarInteractionMode"
+	array[2]="$space""<integer name=\"config_navBarInteractionMode\">2</integer>"
+	#notification_sound
+	array[3]="$config_xml"
+	array[4]="config_audio_notif_vol_default"
+	array[5]="$space""<integer name=\"config_audio_notif_vol_default\">0</integer>"
+	#haptic_feedback
+	array[6]="$config_xml"
+	array[7]="config_defaultHapticFeedbackIntensity"
+	array[8]="$space""<integer name=\"config_defaultHapticFeedbackIntensity\">0</integer>"
+	#ring_volume
+	array[9]="$config_xml"
+	array[10]="config_audio_ring_vol_default"
+	array[11]="$space""<integer name=\"config_audio_ring_vol_default\">0</integer>"
+	#haptic_feedback2
+	array[12]="$defaults_xml"
+	array[13]="def_haptic_feedback"
+	array[14]="$space""<bool name=\"def_haptic_feedback\">false</bool>"
+	#bluetooth_disabled
+	array[15]="$defaults_xml"
+	array[16]="def_bluetooth_on"
+	array[17]="$space""<bool name=\"def_bluetooth_on\">false</bool>"
+	#touch_sounds
+	array[18]="$defaults_xml"
+	array[19]="def_sound_effects_enabled"
+	array[20]="$space""<bool name=\"def_sound_effects_enabled\">false</bool>"
+	#ring_default
+	array[21]="$defaults_xml"
+	array[22]="def_notifications_use_ring_volume"
+	array[23]="$space""<bool name=\"def_notifications_use_ring_volume\">false</bool>"
+	#insert_string->array
+	count="${#array[@]}"
+	IFS=":"
+	read -ra ADDR<<<"$string"
+
+	if [[ ! -z "$string" ]]; then
+
+		for i in "${ADDR[@]}"; do 
+
+			array[$count]="$i"
+			((count++))
+			 
+		done
+	fi
+
+	for ((x=0;x<$(echo "${#array[@]}/3" | bc);x++)); do
+
+		if [ "$x" -eq "0" ]; then
+		
+			dest="${array[0]}"
+			grep="${array[1]}"
+			replace="${array[2]}"
+		else
+		
+			dest="${array[x*3]}"
+			grep="${array[x*3+1]}"
+			replace="${array[x*3+2]}"
+		fi
+			
+		line_nr=$(cat "$dest" | grep -n "$grep" | cut -d ":" -f1)
+		[ ! -z "$line_nr" ] && sed -i "$line_nr s|^.*$|$replace|" "$dest" || echo -e "\n grep failed on config_patch: $grep"
+	done
+		
+	#battery_percentage
+	init_core="$space""<\!-- Default value set for battery percentage in status bar false = disabled, true = enabled -->\n$space<bool name=\"config_defaultBatteryPercentageSetting\">true</bool>"
+	grep_check=$(cat "$config_xml" | grep -o "config_defaultBatteryPercentageSetting" || true)
+	init_line=$(cat "$config_xml" | grep -n "config_battery_percentage_setting_available" | cut -d ":" -f1) && ((init_line++)) || init_line=4565
+	[ -z "$grep_check" ] && sed -i "$init_line i \\\n$init_core" "$config_xml" || echo -e "\ngrep failed on config_patch: defaultBatteryPercentageSetting"
+}
+
+copyFiles() {
+	#pointer_img
+	cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
+	cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
+	cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
+	cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
+	#product_packages
+	cp $BL/apk/handheld_product.mk $PWD/build/target/product/handheld_product.mk
+	#phh_settings
+	cp $BL/misc/phh/xml/* $PWD/treble_app/app/src/main/res/xml
+	#wallpaper_1600x2560
+	cp $BL/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw600dp-nodpi/default_wallpaper.png
+	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-sw720dp-nodpi/default_wallpaper.png
+	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/core/res/res/drawable-nodpi/default_wallpaper.png
+	cp $BL/treble_build_aosp/misc/wallpaper/default_wallpaper.png $PWD/frameworks/base/tests/HwAccelerationTest/res/drawable/default_wallpaper.png
+	#apps
+	#cp -r $BL/apk/apps/* $PWD/packages/apps
+}
+
+makeKeys() {
+
+	$BL/misc/keymaker.sh
+
+}
+
 setupEnv() {
     echo "--> Setting up build environment"
     source build/envsetup.sh &>/dev/null
@@ -57,6 +178,8 @@ setupEnv() {
 }
 
 buildTrebleApp() {
+    #copy build.sh
+    cp $BL/misc/gradle.sh $PWD/treble_app/build.sh
     echo "--> Building treble_app"
     cd treble_app
     bash build.sh release
@@ -83,16 +206,12 @@ buildGappsVariant() {
     echo
 }
 
-buildVndkliteVariants() {
+buildVndkliteVariant() {
     echo "--> Building treble_arm64_bvN-vndklite"
     cd sas-creator
     sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bvN.img
-    mv s.img $BD/system-treble_arm64_bvN-vndklite.img
-    sudo rm -rf d tmp
-    echo "--> Building treble_arm64_bgN-vndklite"
-    sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bgN.img
-    mv s.img $BD/system-treble_arm64_bgN-vndklite.img
-    sudo rm -rf d tmp
+    cp s.img $BD/system-treble_arm64_bvN-vndklite.img
+    sudo rm -rf s.img d tmp
     cd ..
     echo
 }
@@ -101,53 +220,27 @@ generatePackages() {
     echo "--> Generating packages"
     buildDate="$(date +%Y%m%d)"
     xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/aosp-arm64-ab-vanilla-14.0-$buildDate.img.xz
-    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/aosp-arm64-ab-vanilla-vndklite-14.0-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/aosp-arm64-ab-vndklite-14.0-$buildDate.img.xz
     xz -cv $BD/system-treble_arm64_bgN.img -T0 > $BD/aosp-arm64-ab-gapps-14.0-$buildDate.img.xz
-    xz -cv $BD/system-treble_arm64_bgN-vndklite.img -T0 > $BD/aosp-arm64-ab-gapps-vndklite-14.0-$buildDate.img.xz
     rm -rf $BD/system-*.img
-    echo
-}
-
-generateOta() {
-    echo "--> Generating OTA file"
-    version="$(date +v%Y.%m.%d)"
-    buildDate="$(date +%Y%m%d)"
-    timestamp="$START"
-    json="{\"version\": \"$version\",\"date\": \"$timestamp\",\"variants\": ["
-    find $BD/ -name "aosp-*-14.0-$buildDate.img.xz" | sort | {
-        while read file; do
-            filename="$(basename $file)"
-            if [[ $filename == *"vanilla-vndklite"* ]]; then
-                name="treble_arm64_bvN-vndklite"
-            elif [[ $filename == *"gapps-vndklite"* ]]; then
-                name="treble_arm64_bgN-vndklite"
-            elif [[ $filename == *"vanilla"* ]]; then
-                name="treble_arm64_bvN"
-            else
-                name="treble_arm64_bgN"
-            fi
-            size=$(wc -c $file | awk '{print $1}')
-            url="https://github.com/ponces/treble_build_aosp/releases/download/$version/$filename"
-            json="${json} {\"name\": \"$name\",\"size\": \"$size\",\"url\": \"$url\"},"
-        done
-        json="${json%?}]}"
-        echo "$json" | jq . > $BL/ota.json
-    }
     echo
 }
 
 START=$(date +%s)
 
+buildEnv
 initRepos
 syncRepos
 applyPatches
 setupEnv
 buildTrebleApp
+copyFiles
+configPatches
+makeKeys
 buildVanillaVariant
 buildGappsVariant
-buildVndkliteVariants
+buildVndkliteVariant
 generatePackages
-generateOta
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
