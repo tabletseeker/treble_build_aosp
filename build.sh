@@ -14,7 +14,7 @@ set -e
 BL=$PWD/treble_build_aosp
 BD=$HOME/builds
 
-buildEnv() {
+buildEnvDebian() {
 
 	sudo apt-get update && sudo apt-get install -y git-core gnupg flex bison \
 	build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
@@ -26,7 +26,41 @@ buildEnv() {
 
 	JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
 	export SKIP_ABI_CHECKS=true
-	export JAVA_HOME=$JAVA_DIR
+	export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
+}
+
+buildEnvArch() {
+
+sudo pacman -Syyu --noconfirm
+sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools --noconfirm
+sudo archlinux-java set java-17-openjdk
+mkdir -p $PWD/packages
+cd $PWD/packages
+
+git clone https://aur.archlinux.org/aosp-devel.git
+git clone https://aur.archlinux.org/lineageos-devel.git
+git clone https://aur.archlinux.org/xml2.git
+git clone https://aur.archlinux.org/android-sdk-cmdline-tools-latest.git
+git clone https://aur.archlinux.org/android-sdk-build-tools.git
+git clone https://aur.archlinux.org/android-sdk-platform-tools.git
+git clone https://aur.archlinux.org/android-sdk.git
+git clone https://aur.archlinux.org/android-platform.git
+git clone https://aur.archlinux.org/ncurses5-compat-libs.git
+git clone https://aur.archlinux.org/lib32-ncurses5-compat-libs.git
+git clone https://aur.archlinux.org/android-support-repository.git
+git clone https://aur.archlinux.org/marvin_dsc.git
+
+for i in ./*/* ; do
+
+	(cd "$i" && makepkg -s -i -c --noconfirm)
+
+done
+
+	git config --global user.email "anon@ymous.com"
+	git config --global user.name "johndoe"
+
+	export SKIP_ABI_CHECKS=true
+	export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 }
 
 initRepos() {
@@ -228,7 +262,8 @@ generatePackages() {
 
 START=$(date +%s)
 
-buildEnv
+buildEnvDebian
+#buildEnvArch
 initRepos
 syncRepos
 applyPatches
