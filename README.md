@@ -15,7 +15,7 @@ All necessary packages and path implementations are covered by the build script,
     ```
     git clone https://github.com/tabletseeker/treble_build_aosp -b android-14.0
     ```
-- Customize as needed
+- Customize as needed (Without any changes the default customizations apply)
 
 - Finally, start the build script:
     ```
