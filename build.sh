@@ -59,6 +59,12 @@ done
 	git config --global user.email "anon@ymous.com"
 	git config --global user.name "johndoe"
 
+	sudo groupadd android-sdk
+	sudo gpasswd -a liveuser android-sdk
+	sudo setfacl -R -m g:android-sdk:rwx /opt/android-sdk
+	sudo setfacl -d -m g:android-sdk:rwX /opt/android-sdk
+	newgrp android-sdk
+
 	JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
 	export SKIP_ABI_CHECKS=true
 	export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
