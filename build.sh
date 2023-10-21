@@ -33,7 +33,6 @@ buildEnvArch() {
 
 sudo pacman -Syyu --noconfirm
 sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools --noconfirm
-sudo archlinux-java set java-17-openjdk
 mkdir -p $PWD/packages
 cd $PWD/packages
 
@@ -60,8 +59,9 @@ done
 	git config --global user.email "anon@ymous.com"
 	git config --global user.name "johndoe"
 
+	JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
 	export SKIP_ABI_CHECKS=true
-	export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+	export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
 }
 
 initRepos() {
