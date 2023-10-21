@@ -41,15 +41,38 @@ What you need to do:
 - enter that name in the treble_build_aosp/apk/handheld_product.mk
 - create and Android.mk file in your newly created app folder
 - add your Android.mk file and apk
-- uncomment this line '#cp -r $BL/apk/apps/* $PWD/packages/apps' in the treble_build_aosp/build.sh
+- uncomment this line `#cp -r $BL/apk/apps/* $PWD/packages/apps` in the treble_build_aosp/build.sh
 #### Caution!
-  By default the apk folder already contains a few app folders with Android.mk files. If you **do not** want them, **delete** those folders. This is for the purpose of including
-  apps most people install anyways and to serve as a template for other apps you might want to install. Thus all you would have to do
-  to install them is add the apks (from apkmirror or any other suorce) to those folders and rename the apks as referenced in the Android.mk under LOCAL_SRC_FILES.
+By default the apk folder already contains a few app folders with Android.mk files. If you **do not** want them, **delete** those folders.    This is for the purpose of including apps most people install anyways and to serve as a template for other apps you might want to install.    Thus all you would have to do to install them is add the apks (from apkmirror or any other suorce) to those folders and rename the apks as referenced in the Android.mk under LOCAL_SRC_FILES.
+#### pointer
+contains transparent pointer_arrow.png duplicates that will override the defaults during build. This is meant to make stylus operation easier.
+You can disable it by commenting out the following in treble_build_aosp/build.sh:
+```
+cp "$DISK"/aosp_build/pointer/xhdpi/*.png "$PWD"/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
+cp "$DISK"/aosp_build/pointer/mdpi/*.png "$PWD"/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
+cp "$DISK"/aosp_build/pointer/hdpi/*.png "$PWD"/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
+cp "$DISK"/aosp_build/pointer/xxhdpi/*.png "$PWD"/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
+```
+#### system settings
+- treble_build_aosp/build.sh contains a function called `configPatches()`
+- this function allows you to automatically add preferred android system settings to the appropriate xml
+- for ease of access the most common settings have been written out and named in the array
+- new additions can be made to the string variable
 
-## Issues
-[Open issue](https://github.com/tabletseeker/treble_build_aosp/issues/new/choose)
+How it works:
+3 sets of values are needed to replace a default setting in any xml:
+- xml location
+- example: `"$PWD/frameworks/base/core/res/res/values/config.xml"`
+- uniquely identifiable text so grep can find the line
+- example: `"config_navBarInteractionMode"`
+- the entire line with preferred settings value + spacer (default android spacing is 4)
+- example: `"$space""<integer name=\"config_audio_notif_vol_default\">0</integer>"` - be sure to escape \\"\\" quotation marks
+- Finally each part needs to be separated with a : delimiter
 
+example addition to string:
+`string="$PWD/frameworks/base/core/res/res/values/config.xml:config_navBarInteractionMode:$space<integer name=\"config_audio_notif_vol_default\">0</integer>"`
+you can add as many entries as you want as long as they always follow this same pattern and delimiter separation.
+  
 ## Credits
 These people have helped this project in some way or another, so they should be the ones who receive all the credit:
 - [phhusson](https://github.com/phhusson)
