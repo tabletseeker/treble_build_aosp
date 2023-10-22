@@ -1,5 +1,7 @@
 # Fully Customizable TrebleDroid AOSP GSI
 
+## Introduction
+In addition to building an aosp 14 gsi, this repository aims to grant the user complete control over all customizable aspects of the build, such as adding a custom wallpaper, changing Phh settings, creating custom signing keys, modifying system settings, installing apks and more.
 ## Build
 All necessary packages and path implementations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
 
