@@ -15,6 +15,11 @@ All necessary packages and path implementations are covered by the build script,
     ```
     git clone https://github.com/tabletseeker/treble_build_aosp -b android-14.0
     ```
+- Uncomment build environment function for either Debian/Ubuntu or Arch in      treble_build_aosp/build.sh (Default Debian environment)
+    ```
+    #buildEnvDebian
+    #buildEnvArch
+    ```
 - Customize as needed (Without any changes the default customizations apply)
 
 - Finally, start the build script:
