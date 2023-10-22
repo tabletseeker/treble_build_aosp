@@ -23,6 +23,7 @@ All necessary packages and path implementations are covered by the build script,
     ```
 ## Customization
 All customization options can be found in the treble_build_aosp folder
+### Phh settings, signing keys & wallpaper
 #### misc
 - treble_build_aosp/misc/phh/xml contains the config xmls for all phh settings.
   the currently assigned default settings are linear brightness (to fix broken slider adjustment),
@@ -32,6 +33,7 @@ All customization options can be found in the treble_build_aosp folder
   as long as the image size matches your device's screen resolution. The current image's size is 1600x2560 ( Galaxy Tab S6)
 - treble_build_aosp/misc/gradle.sh fixes java and android path issues in the original treble_app build.sh
 - treble_build_aosp/misc/keymaker.sh automatically removes the default signing keys and creates new ones (password requested)
+### Automatically installing apps
 #### apk
 - treble_build_aosp/apk/handheld_product.mk is needed to enter application folders for installation
 - treble_build_aosp/apk/apps contains the application folders that will be automatically installed in the build
@@ -45,6 +47,7 @@ What you need to do:
 - uncomment this line `#cp -r $BL/apk/apps/* $PWD/packages/apps` in the treble_build_aosp/build.sh
 #### Caution!
 By default the apk folder already contains a few app folders with Android.mk files. If you do not wish to add apks to these default folders, which would trigger automatic installation, make sure to **delete** them before uncommenting the line mentioned above, because app folders with missing apks cause a build error. The purpose of including default app folders is to provide mk files for apps most people install anyways and to serve as a template for other apps you might want to install. Thus all you would have to do to install them is add the apks (from apkmirror or any other source) to those folders and rename these apks as referenced in the Android.mk under LOCAL_SRC_FILES.
+### Transparent pointer image (For Stylus users)
 #### pointer
 contains transparent pointer_arrow.png duplicates that will override the defaults during build. The default pointer is a giant black cursor which is ugly and while PHH settings do offer alternatives, most people still prefer a completely transparent and thus non-visible pointer. This is meant to make stylus operation easier.
 You can disable it by commenting out the following in treble_build_aosp/build.sh:
@@ -54,10 +57,11 @@ cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointe
 cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
 cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
 ```
+### Changing any system settings on the fly
 #### system settings
 - treble_build_aosp/build.sh contains a function called `configPatches()`
 - this function allows you to automatically add preferred android system settings to the appropriate xml
-- for ease of access the most common settings have been written out and named in the array
+- for ease of access the most common settings have been written out and named in the array so you can easily find and change them, such as navigation bar style, ring volume, haptic feedback, battery percentage style etc.
 - new additions can be made to the string variable
 
 How it works:
