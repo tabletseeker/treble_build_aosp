@@ -16,7 +16,7 @@ BD=$HOME/builds
 
 buildEnvDebian() {
 
-sudo apt-get update && sudo apt-get install -y git-core gnupg flex bison \
+sudo apt-get update && sudo apt-get install -y git-core gnupg flex bc bison \
 build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
 libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
 clang repo git android-sdk-platform-tools-common openjdk-17-jdk
@@ -32,9 +32,9 @@ export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
 buildEnvArch() {
 
 sudo pacman -Syyu --noconfirm
-sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools --noconfirm
-mkdir -p $PWD/packages
-cd $PWD/packages
+sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools bc --noconfirm
+mkdir -p $PWD/install_packages
+cd $PWD/install_packages
 
 git clone https://aur.archlinux.org/aosp-devel.git
 git clone https://aur.archlinux.org/lineageos-devel.git
