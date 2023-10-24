@@ -36,17 +36,17 @@ sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools bc --n
 mkdir -p $PWD/install_packages
 cd $PWD/install_packages
 
+git clone https://aur.archlinux.org/xml2.git
+git clone https://aur.archlinux.org/ncurses5-compat-libs.git
+git clone https://aur.archlinux.org/lib32-ncurses5-compat-libs.git
 git clone https://aur.archlinux.org/aosp-devel.git
 git clone https://aur.archlinux.org/lineageos-devel.git
-git clone https://aur.archlinux.org/xml2.git
-git clone https://aur.archlinux.org/android-sdk-cmdline-tools-latest.git
 git clone https://aur.archlinux.org/android-sdk-build-tools.git
 git clone https://aur.archlinux.org/android-sdk-platform-tools.git
 git clone https://aur.archlinux.org/android-sdk.git
 git clone https://aur.archlinux.org/android-platform.git
-git clone https://aur.archlinux.org/ncurses5-compat-libs.git
-git clone https://aur.archlinux.org/lib32-ncurses5-compat-libs.git
 git clone https://aur.archlinux.org/android-support-repository.git
+git clone https://aur.archlinux.org/android-sdk-cmdline-tools-latest.git
 git clone https://aur.archlinux.org/marvin_dsc.git
 
 for i in $(ls -tr | column -t) ; do
