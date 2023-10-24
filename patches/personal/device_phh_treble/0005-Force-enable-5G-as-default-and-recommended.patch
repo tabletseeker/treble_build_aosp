@@ -1,0 +1,23 @@
+From c61f9efdbb87afc0a92fcb2ae901460839d95cc4 Mon Sep 17 00:00:00 2001
+From: Alberto Ponces <ponces26@gmail.com>
+Date: Mon, 23 Oct 2023 11:45:35 +0000
+Subject: [PATCH 5/5] Force enable 5G as default and recommended
+
+---
+ rw-system.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/rw-system.sh b/rw-system.sh
+index a131e62..8badcb7 100644
+--- a/rw-system.sh
++++ b/rw-system.sh
+@@ -1191,3 +1191,6 @@ fi
+ # Override media volume steps
+ resetprop_phh ro.config.media_vol_steps 25
+ resetprop_phh ro.config.media_vol_default 8
++
++# Force 5G
++resetprop_phh ro.telephony.default_network 33,33
+-- 
+2.34.1
+
