@@ -188,10 +188,10 @@ configPatches() {
 
 copyFiles() {
 	#pointer_img
-	cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
-	cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
-	cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
-	cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
+	#cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
+	#cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
+	#cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
+	#cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
 	#product_packages
 	cp $BL/apk/handheld_product.mk $PWD/build/target/product/handheld_product.mk
 	#phh_settings
