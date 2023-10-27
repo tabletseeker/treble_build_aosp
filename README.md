@@ -57,12 +57,12 @@ By default the apk folder already contains a few app folders with Android.mk fil
 ### Transparent pointer image (For Stylus users)
 #### pointer
 contains transparent pointer_arrow.png duplicates that will override the defaults during build. The default pointer is a giant black cursor which is ugly and while PHH settings do offer alternatives, most people still prefer a completely transparent and thus non-visible pointer. This is meant to make stylus operation easier.
-You can disable it by commenting out the following in treble_build_aosp/build.sh:
+You can enable it globally by uncommenting the following in treble_build_aosp/build.sh:
 ```
-cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
-cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
-cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
-cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
+#cp $BL/pointer/xhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xhdpi/pointer_arrow.png
+#cp $BL/pointer/mdpi/*.png $PWD/frameworks/base/core/res/res/drawable-mdpi/pointer_arrow.png
+#cp $BL/pointer/hdpi/*.png $PWD/frameworks/base/core/res/res/drawable-hdpi/pointer_arrow.png
+#cp $BL/pointer/xxhdpi/*.png $PWD/frameworks/base/core/res/res/drawable-xxhdpi/pointer_arrow.png
 ```
 ### Changing any system settings on the fly
 #### system settings
