@@ -247,12 +247,16 @@ buildGappsVariant() {
     echo
 }
 
-buildVndkliteVariant() {
+buildVndkliteVariants() {
     echo "--> Building treble_arm64_bvN-vndklite"
-    cd sas-creator
+    cd treble_adapter
     sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bvN.img
-    cp s.img $BD/system-treble_arm64_bvN-vndklite.img
-    sudo rm -rf s.img d tmp
+    mv s.img $BD/system-treble_arm64_bvN-vndklite.img
+    sudo rm -rf d tmp
+    echo "--> Building treble_arm64_bgN-vndklite"
+    sudo bash lite-adapter.sh 64 $BD/system-treble_arm64_bgN.img
+    mv s.img $BD/system-treble_arm64_bgN-vndklite.img
+    sudo rm -rf d tmp
     cd ..
     echo
 }
@@ -261,9 +265,38 @@ generatePackages() {
     echo "--> Generating packages"
     buildDate="$(date +%Y%m%d)"
     xz -cv $BD/system-treble_arm64_bvN.img -T0 > $BD/aosp-arm64-ab-vanilla-14.0-$buildDate.img.xz
-    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/aosp-arm64-ab-vndklite-14.0-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bvN-vndklite.img -T0 > $BD/aosp-arm64-ab-vanilla-vndklite-14.0-$buildDate.img.xz
     xz -cv $BD/system-treble_arm64_bgN.img -T0 > $BD/aosp-arm64-ab-gapps-14.0-$buildDate.img.xz
+    xz -cv $BD/system-treble_arm64_bgN-vndklite.img -T0 > $BD/aosp-arm64-ab-gapps-vndklite-14.0-$buildDate.img.xz
     rm -rf $BD/system-*.img
+    echo
+}
+
+generateOta() {
+    echo "--> Generating OTA file"
+    version="$(date +v%Y.%m.%d)"
+    buildDate="$(date +%Y%m%d)"
+    timestamp="$START"
+    json="{\"version\": \"$version\",\"date\": \"$timestamp\",\"variants\": ["
+    find $BD/ -name "aosp-*-14.0-$buildDate.img.xz" | sort | {
+        while read file; do
+            filename="$(basename $file)"
+            if [[ $filename == *"vanilla-vndklite"* ]]; then
+                name="treble_arm64_bvN-vndklite"
+            elif [[ $filename == *"gapps-vndklite"* ]]; then
+                name="treble_arm64_bgN-vndklite"
+            elif [[ $filename == *"vanilla"* ]]; then
+                name="treble_arm64_bvN"
+            else
+                name="treble_arm64_bgN"
+            fi
+            size=$(wc -c $file | awk '{print $1}')
+            url="https://github.com/ponces/treble_build_aosp/releases/download/$version/$filename"
+            json="${json} {\"name\": \"$name\",\"size\": \"$size\",\"url\": \"$url\"},"
+        done
+        json="${json%?}]}"
+        echo "$json" | jq . > $BL/ota.json
+    }
     echo
 }
 
@@ -281,8 +314,9 @@ configPatches
 makeKeys
 buildVanillaVariant
 buildGappsVariant
-buildVndkliteVariant
+buildVndkliteVariants
 generatePackages
+generateOta
 
 END=$(date +%s)
 ELAPSEDM=$(($(($END-$START))/60))
