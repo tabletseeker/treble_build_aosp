@@ -51,7 +51,7 @@ buildEnvArch() {
 	mkdir -p $PWD/install_packages
 	cd $PWD/install_packages
 	
-	for package in aur_packages; do
+	for package in ${aur_packages[@]}; do
 		[ -w "${package}" ] && cd ${package}; git pull; cd .. || git clone https://aur.archlinux.org/${package}.git
 		(cd "${package}" && makepkg -s -i -c --noconfirm; cd ..)
 	done
@@ -60,7 +60,7 @@ buildEnvArch() {
 	git config --global user.email "anon@ymous.com"
 	git config --global user.name "johndoe"
 
-	sudo groupadd android-sdk
+	getent group android-sdk || sudo groupadd android-sdk
 	sudo gpasswd -a $LOGNAME android-sdk
 	sudo setfacl -R -m g:android-sdk:rwx /opt/android-sdk
 	sudo setfacl -d -m g:android-sdk:rwX /opt/android-sdk
