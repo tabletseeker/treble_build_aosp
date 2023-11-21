@@ -51,7 +51,7 @@ git clone https://aur.archlinux.org/marvin_dsc.git
 
 for i in $(ls -tr | column -t) ; do
 
-	(cd "$i" && makepkg -s -i -c --noconfirm; cd ..)
+	(cd "$i" && makepkg -s -i -c --noconfirm --skippgpcheck; cd ..)
 
 done
 
