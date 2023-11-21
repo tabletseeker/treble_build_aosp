@@ -16,44 +16,45 @@ BD=$HOME/builds
 
 buildEnvDebian() {
 
-sudo apt-get update && sudo apt-get install -y git-core gnupg flex bc bison \
-build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
-libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
-clang repo git android-sdk-platform-tools-common openjdk-17-jdk
-
-git config --global user.email "anon@ymous.com"
-git config --global user.name "johndoe"
-
-JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
-export SKIP_ABI_CHECKS=true
-export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
+	sudo apt-get update && sudo apt-get install -y git-core gnupg flex bc bison \
+	build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
+	libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
+	clang repo git android-sdk-platform-tools-common openjdk-17-jdk
+	
+	git config --global user.email "anon@ymous.com"
+	git config --global user.name "johndoe"
+	
+	JAVA_DIR=$(ls /usr/lib/jvm | grep -Em1 java-[0-9]{2}-openjdk)
+	export SKIP_ABI_CHECKS=true
+	export JAVA_HOME=/usr/lib/jvm/$JAVA_DIR
 }
 
 buildEnvArch() {
 
-sudo pacman -Syyu --noconfirm
-sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools bc --noconfirm
-mkdir -p $PWD/install_packages
-cd $PWD/install_packages
+	aur_packages=(
+		"xml2"
+	 	"ncurses5-compat-libs"
+	  	"lib32-ncurses5-compat-libs"
+	   	"aosp-devel"
+	    	"lineageos-devel"
+	     	"android-sdk-build-tools"
+	      	"android-sdk-platform-tools"
+		"android-sdk"
+	 	"android-platform"
+		"android-support-repository"
+		"android-sdk-cmdline-tools-latest"
+		"marvin_dsc"
+	)
 
-git clone https://aur.archlinux.org/xml2.git
-git clone https://aur.archlinux.org/ncurses5-compat-libs.git
-git clone https://aur.archlinux.org/lib32-ncurses5-compat-libs.git
-git clone https://aur.archlinux.org/aosp-devel.git
-git clone https://aur.archlinux.org/lineageos-devel.git
-git clone https://aur.archlinux.org/android-sdk-build-tools.git
-git clone https://aur.archlinux.org/android-sdk-platform-tools.git
-git clone https://aur.archlinux.org/android-sdk.git
-git clone https://aur.archlinux.org/android-platform.git
-git clone https://aur.archlinux.org/android-support-repository.git
-git clone https://aur.archlinux.org/android-sdk-cmdline-tools-latest.git
-git clone https://aur.archlinux.org/marvin_dsc.git
-
-for i in $(ls -tr | column -t) ; do
-
-	(cd "$i" && makepkg -s -i -c --noconfirm --skippgpcheck; cd ..)
-
-done
+	sudo pacman -Syyu --noconfirm
+	sudo pacman -S ttf-dejavu repo git base-devel jdk17-openjdk android-tools bc --noconfirm
+	mkdir -p $PWD/install_packages
+	cd $PWD/install_packages
+	
+	for package in aur_packages; do
+		[ -w "${package}" ] && cd ${package}; git pull; cd .. || git clone https://aur.archlinux.org/${package}.git
+		(cd "${package}" && makepkg -s -i -c --noconfirm; cd ..)
+	done
 
 	cd ..
 	git config --global user.email "anon@ymous.com"
