@@ -1,3 +1,5 @@
+![Cover](https://xdaforums.com/proxy.php?image=https%3A%2F%2Fi.ibb.co%2FhmN4QqM%2Fandroid-14-3.png&hash=6e41d7302e75c730c0b093404ad78869)
+
 # Fully Customizable TrebleDroid AOSP GSI
 
 ## Introduction
@@ -163,7 +165,9 @@ settings="\tconfig_navBarInteractionMode:2
  ```
 
 You can add as many entries as you want as long as they always follow this same pattern and delimiter separation.
-  
+
+## Additional Sources
+- [XDA Thread](https://xdaforums.com/t/gsi-aosp-14-fully-customizable-rom-latest-treble-patches-features.4637632/)
 ## Credits
 These people have helped this project in some way or another, so they should be the ones who receive all the credit:
 - [phhusson](https://github.com/phhusson)
@@ -176,7 +180,6 @@ These people have helped this project in some way or another, so they should be 
 - [Iceows](https://github.com/Iceows)
 - [ChonDoit](https://github.com/ChonDoit)
 - [ponces](https://github.com/ponces)
-
 ## Donations :heartpulse:
 If you like my contributions please feel free to drop a coin.
 - Bitcoin Address: bc1qjz2dqu4u5uhxcv43jqmlefgffe3hnfavcs8w90
