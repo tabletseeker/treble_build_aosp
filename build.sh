@@ -199,8 +199,9 @@ applyPatches() {
 		for x in ${!patch_array[@]}; do
 
 			darray+=($(echo "${patch_array[x]} ${patch_array[x]} $state"))
-   			[ $x -eq 0 ] && darray[1]=" ${darray[1]}"  || \
-   			int=$((int+3)) && darray[int+1]=" ${darray[int+1]}"
+			[ $x -eq 0 ] && darray[1]=" ${darray[1]}"  || \
+			{ int=$((int+3));darray[int+1]=" ${darray[int+1]}"; }
+
 		done
 
 		while true; do
@@ -232,8 +233,9 @@ applyPatches() {
 					for x in ${!patch_array[@]}; do
 
 						darray+=($(echo "${patch_array[x]} ${patch_array[x]} $state"))
-			   			[ $x -eq 0 ] && darray[1]=" ${darray[1]}"  || \
-			   			int=$((int+3)) && darray[int+1]=" ${darray[int+1]}"
+						[ $x -eq 0 ] && darray[1]=" ${darray[1]}"  || \
+						{ int=$((int+3));darray[int+1]=" ${darray[int+1]}"; }
+
 					done     					
 					;;
 
