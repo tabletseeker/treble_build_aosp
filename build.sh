@@ -198,16 +198,11 @@ applyPatches() {
 		
 		for x in ${!patch_array[@]}; do
 
-			darray+=($(echo "${patch_array[x]} ${patch_array[x]} $state"))
-			[ $x -eq 0 ] && \
-			{ darray[0]=" ${darray[0]}";
-			darray[1]=" ${darray[1]}";
-			darray[2]=" ${darray[2]}"; } || \
-			{ darray[x*3]=" ${darray[x*3]}";
-			darray[x*3+1]=" ${darray[x*3+1]}";
-			darray[x*3+2]=" ${darray[x*3+2]}"; }   
+			darray+=($(echo "${patch_array[x]} ${patch_array[x]} $state"))  
 
 		done
+
+  		darray=( "${darray[@]/#/ }" )
 
 		while true; do
 					
@@ -237,15 +232,10 @@ applyPatches() {
 					for x in ${!patch_array[@]}; do
 
 						darray+=($(echo "${patch_array[x]} ${patch_array[x]} $state"))
-			      			[ $x -eq 0 ] && \
-						{ darray[0]=" ${darray[0]}";
-						darray[1]=" ${darray[1]}";
-						darray[2]=" ${darray[2]}"; } || \
-						{ darray[x*3]=" ${darray[x*3]}";
-						darray[x*3+1]=" ${darray[x*3+1]}";
-						darray[x*3+2]=" ${darray[x*3+2]}"; }
 
 					done
+     					
+	  				darray=( "${darray[@]/#/ }" )
 					;;
 
 				1)
