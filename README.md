@@ -14,7 +14,11 @@ sudo apt-get install -y dialog
 ```
 sudo pacman -S dialog --noconfirm
 ```
-
+Additionally, Debian/Ubuntu users must ensure a complete /etc/apt/sources.list for all packages to be installed normally.
+```
+deb https://deb.debian.org/debian/ bookworm main contrib non-free-firmware
+deb-src https://deb.debian.org/debian/ bookworm main contrib non-free-firmware
+```
 ## Build
 All necessary packages and path implementations are covered by the build script, which will automatically setup a working build environment for Debian/Ubuntu or Arch.
 
@@ -29,6 +33,10 @@ All necessary packages and path implementations are covered by the build script,
 - Clone this repo:
     ```
     git clone https://github.com/tabletseeker/treble_build_aosp -b android-14.0
+    ```
+- Making scripts executable:
+    ```
+    find . -name '*.sh' -type f | xargs chmod +x
     ```
 - Customize as needed (Without any changes the default customizations apply)
 
