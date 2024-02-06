@@ -14,7 +14,7 @@ sudo apt-get install -y dialog
 ```
 sudo pacman -S dialog --noconfirm
 ```
-Additionally, Debian/Ubuntu users must ensure a complete /etc/apt/sources.list for all packages to be installed normally.
+Additionally, Debian/Ubuntu users must ensure a complete `/etc/apt/sources.list` for all packages to be installed normally.
 ```
 deb https://deb.debian.org/debian/ bookworm main contrib non-free-firmware
 deb-src https://deb.debian.org/debian/ bookworm main contrib non-free-firmware
