@@ -167,7 +167,7 @@ initRepos() {
 	
 	fi
 	
-	[ -z "$version" ] && version="android-14.0.0_r21"
+	[ -z "$version" ] && version="android-14.0.0_r28"
         
         repo init -u https://android.googlesource.com/platform/manifest -b "$version" --git-lfs --depth=1
         echo ""
