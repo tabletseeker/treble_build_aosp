@@ -488,7 +488,7 @@ copyFiles() {
 
 makeKeys() {
 
-	[[ "${buildlist[@]}" == *"6"* ]] && $BL/misc/keymaker.sh
+	[[ "${buildlist[@]}" == *"6"* ]] && bash $BL/misc/keymaker.sh
 
 }
 
