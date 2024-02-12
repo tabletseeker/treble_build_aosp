@@ -40,10 +40,6 @@ All necessary packages and path implementations are covered by the build script,
     ```
     git clone https://github.com/tabletseeker/treble_build_aosp -b android-14.0
     ```
-- Making scripts executable:
-    ```
-    find . -name '*.sh' -type f | xargs chmod +x
-    ```
 - Customize as needed (Without any changes the default customizations apply)
 
 - Finally, start the build script:
