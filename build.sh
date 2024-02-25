@@ -71,7 +71,7 @@ buildEnvDebian() {
 	sudo apt-get update && sudo apt-get install -y git-core gnupg flex bc bison \
 	build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev \
 	libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
-	clang repo git android-sdk-platform-tools-common openjdk-17-jdk
+	clang repo git nano android-sdk-platform-tools-common openjdk-17-jdk
 	
 	git config --global user.email "anon@ymous.com"
 	git config --global user.name "johndoe"
